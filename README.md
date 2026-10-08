@@ -8,12 +8,10 @@ Sea-surface temperature and anomaly, sea ice, chlorophyll, coral heat stress, wa
 rainfall, satellite true color and GOES imagery, drawn on a flat map (equirect, Mercator,
 Mollweide, Equal Earth, polar) or a relief globe. Overlays add currents and wind particle trails,
 weather radar, tropical cyclones, wildfires, boundaries and places. A built-in analysis language
-(with an optional Claude/Gemini "Ask" tab and an on-device forecast model) runs correlations,
+(with an optional Claude/Gemini "Ask" tab and an on-device forecast model) runs correlations, 
 composites and time series over the data stacks.
 
-Live feeds are fetched browser-direct from CORS-open hosts (NOAA ERDDAP, NASA GIBS, NOAA STAR,
-RainViewer, OBIS, …). Datasets whose hosts send no CORS header are baked ahead of time into
-`assets/geo/` by the scripts in `tools/geo/`.
+![Earth Explorer](docs/img/earth_explorer.png)
 
 ## Requirements
 
@@ -35,6 +33,10 @@ Pages via [.github/workflows/pages.yml](.github/workflows/pages.yml). The build 
 also runs from any subdirectory of another static host: copy `dist/` there.
 
 ## Layout
+
+Live feeds are fetched browser-direct from CORS-open hosts (NOAA ERDDAP, NASA GIBS, NOAA STAR,
+RainViewer, OBIS, …). Datasets whose hosts send no CORS header are baked ahead of time into
+`assets/geo/` by the scripts in `tools/geo/`.
 
 - `src/main.ts` — the app: one fullscreen WebGPU pass, UI, input, layer management.
 - `src/live/` — data feeds (OISST, GIBS, GOES, RainViewer, cyclones, wildfires, …).
