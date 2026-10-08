@@ -1,0 +1,48 @@
+# Earth Explorer
+
+A living-world map of ocean, atmosphere and climate data, rendered with WebGPU in the browser.
+
+Sea-surface temperature and anomaly, sea ice, chlorophyll, coral heat stress, waves, GFS weather,
+rainfall, satellite true color and GOES imagery, drawn on a flat map (equirect, Mercator,
+Mollweide, Equal Earth, polar) or a relief globe. Overlays add currents and wind particle trails,
+weather radar, tropical cyclones, wildfires, boundaries and places. A built-in analysis language
+(with an optional Claude/Gemini "Ask" tab and an on-device forecast model) runs correlations,
+composites and time series over the data stacks.
+
+Live feeds are fetched browser-direct from CORS-open hosts (NOAA ERDDAP, NASA GIBS, NOAA STAR,
+RainViewer, OBIS, …). Datasets whose hosts send no CORS header are baked ahead of time into
+`assets/geo/` by the scripts in `tools/geo/`.
+
+## Requirements
+
+A browser with WebGPU (Chrome/Edge 113+, Safari 26+, Firefox 141+ on Windows).
+
+## Develop
+
+```sh
+npm install
+npm run dev        # http://localhost:5173/
+npm test           # vitest unit tests
+npm run build      # type-check + production build → dist/
+```
+
+## Deploy
+
+Every push to `main` builds and publishes to GitHub Pages via
+[.github/workflows/pages.yml](.github/workflows/pages.yml). The build uses relative paths, so it
+also runs from any subdirectory of another static host: copy `dist/` there.
+
+## Layout
+
+- `src/main.ts` — the app: one fullscreen WebGPU pass, UI, input, layer management.
+- `src/live/` — data feeds (OISST, GIBS, GOES, RainViewer, cyclones, wildfires, …).
+- `src/analysis/` — the analysis language (AST, interpreter, ops, presets, worker).
+- `src/ui/` — panels: analysis, chat providers, forecast, layer info, import, reproduce.
+- `src/geo/` — GeoJSON and MVT decoding, Web Mercator imagery providers.
+- `src/gpu/` — WebGPU device/canvas context and texture helpers.
+- `assets/geo/` — baked data stacks, basemaps and the forecast model.
+- `tools/geo/` — Node bake scripts for `assets/geo/`, and the forecast training script.
+
+## Data credits
+
+See the "© data credits" popover in the app footer. Basemaps © Solar System Scope (CC BY 4.0).

@@ -1,0 +1,9 @@
+{
+  "dataset": "ncdcOisst21Agg_LonPM180",
+  "source": "NOAA OISST v2.1 via NOAA CoastWatch ERDDAP",
+  "date": "2026-06-24T12:00:00Z",
+  "width": 720,
+  "height": 360,
+  "tMinC": -2,
+  "tMaxC": 34
+}

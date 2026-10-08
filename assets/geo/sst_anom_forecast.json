@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "inputMonths": 4,
+  "channels": [
+    {
+      "layer": "anom",
+      "offset": 0.0,
+      "scale": 5.0
+    }
+  ],
+  "width": 360,
+  "height": 180,
+  "trainedOn": "1981-09..2025-07",
+  "valWindow": "2025-08..2026-07",
+  "valMaeC": 0.4566,
+  "persistenceMaeC": 0.4991,
+  "ablation": [
+    {
+      "channels": [
+        "anom"
+      ],
+      "valMaeC": 0.4566
+    }
+  ],
+  "source": "trained on the repo's baked NOAA OISST v2.1 atlases"
+}

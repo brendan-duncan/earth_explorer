@@ -1,0 +1,3 @@
+# Baked data and the forecast model are binary; never diff or normalize line endings.
+*.png binary
+*.tflite binary

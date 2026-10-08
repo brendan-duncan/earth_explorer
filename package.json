@@ -1,0 +1,28 @@
+{
+  "name": "earth-explorer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A living-world map of ocean, atmosphere and climate data, rendered with WebGPU in the browser.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
+    "@google/genai": "^2.13.0",
+    "@litertjs/core": "^2.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.7.0",
+    "@webgpu/types": "^0.1.69",
+    "sharp": "^0.35.3",
+    "typescript": "^5.4.5",
+    "vite": "^8.0.14",
+    "vitest": "~4.1.10"
+  }
+}

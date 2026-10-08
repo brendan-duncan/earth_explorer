@@ -1,0 +1,232 @@
+/* GIS explorer page styles.
+ *
+ * Tokens on :root, one class per floating panel, and three shared looks (.gis-panel, .gis-ctrl,
+ * .gis-btn) that every control in geo_gis_explorer.ts wears. The TypeScript builds the DOM and
+ * sets only what is per-instance (a width, a colour, a display toggle); layout and skin live here,
+ * which is what lets the phone and coarse-pointer rules below override them without `!important`.
+ */
+
+:root {
+  --gis-accent: #5ef0c8;
+  --gis-warn: #dfa94e;
+  --gis-panel-bg: rgba(8, 10, 14, 0.72);
+  --gis-panel-bg-solid: rgba(8, 10, 14, 0.8);
+  --gis-ctrl-bg: #12141a;
+  --gis-btn-bg: #2a2a38;
+  --gis-border: #444;
+  --gis-hairline: rgba(255, 255, 255, 0.14);
+  --gis-text: #dfeef0;
+  --gis-text-dim: #a8bcc2;
+  --gis-text-muted: #8fa5ab;
+  --gis-text-stats: #9fd8cf;
+  --gis-font: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --gis-shadow: 0 1px 6px rgba(0, 0, 0, 0.4);
+}
+
+html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; color: #fff; font-family: var(--gis-font); }
+/* touch-action:none hands ALL touch gestures on the map to the app (pinch zoom, pan) instead of
+   the browser's page zoom/scroll. */
+canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+/* Everything outside the canvas is ordinary UI, and `manipulation` keeps its taps instant: it drops
+   the browser's ~300 ms wait-and-see for a double-tap-to-zoom without taking scrolling away from
+   the panels that need it. */
+body { touch-action: manipulation; -webkit-text-size-adjust: 100%; }
+
+/* ── Shared looks ───────────────────────────────────────────────────────────────────────── */
+.gis-panel {
+  position: fixed; z-index: 10; background: var(--gis-panel-bg); border-radius: 6px;
+  font-family: var(--gis-font); color: var(--gis-text); box-shadow: var(--gis-shadow);
+}
+.gis-panel.solid { background: var(--gis-panel-bg-solid); }
+.gis-ctrl {
+  background: var(--gis-ctrl-bg); color: var(--gis-text); border: 1px solid var(--gis-border);
+  border-radius: 4px; font-size: 11px; padding: 1px 3px; font-family: inherit;
+}
+.gis-btn {
+  cursor: pointer; background: var(--gis-btn-bg); color: var(--gis-text); border: 1px solid var(--gis-border);
+  border-radius: 4px; height: 22px; padding: 0 8px; font-size: 11px; font-family: inherit;
+}
+.gis-btn.icon { width: 26px; padding: 0; }
+.gis-btn.small { padding: 0 7px; }
+/* Text-only buttons: the ×, ⓘ, and the point panel's link-style actions. */
+.gis-link { cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; color: var(--gis-accent); }
+.gis-check { display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 11px; }
+.gis-check input { accent-color: var(--gis-accent); cursor: pointer; margin: 0; }
+.gis-muted { color: var(--gis-text-muted); }
+.gis-note { color: var(--gis-text-muted); font-size: 10.5px; }
+.gis-warn { color: var(--gis-warn); font-size: 10.5px; }
+
+/* Hover and keyboard-focus states for every control the page builds. */
+.gis-btn:hover, .gis-link:hover, .gis-chip:hover, .gis-zoom button:hover { filter: brightness(1.2); }
+.gis-bar :focus-visible, .gis-menu :focus-visible, .gis-chips :focus-visible, .gis-zoom :focus-visible,
+.gis-search :focus-visible, .gis-help :focus-visible, .gis-legend :focus-visible, .gis-draw :focus-visible,
+.gis-point :focus-visible, .gis-mesh :focus-visible { outline: 2px solid var(--gis-accent); outline-offset: 1px; }
+
+/* ── Control bar ────────────────────────────────────────────────────────────────────────── */
+/* Centered with auto margins rather than left:50% + translateX: a fixed box at left:50% only has
+   the RIGHT half of the viewport as available width, so the bar used to wrap as soon as one more
+   control was added, however much room the screen actually had. */
+.gis-bar {
+  top: 12px; left: 0; right: 0; margin: 0 auto; width: fit-content; max-width: 96vw;
+  padding: 7px 12px; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; font-size: 12px;
+}
+.gis-date {
+  color: var(--gis-accent); min-width: 104px; text-align: center; font-size: 16px; font-weight: 700;
+  letter-spacing: 1px; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+.gis-scrub { width: 150px; accent-color: var(--gis-accent); }
+.gis-scrub-tip {
+  position: fixed; z-index: 11; display: none; pointer-events: none; padding: 2px 6px; border-radius: 4px;
+  background: rgba(8, 10, 14, 0.92); color: var(--gis-accent); font-size: 11px; font-family: var(--gis-font);
+  white-space: nowrap; transform: translate(-50%, -100%);
+}
+/* Segmented draw-mode control: three radio buttons fused into one box. */
+.gis-draw-mode { display: inline-flex; border: 1px solid var(--gis-border); border-radius: 4px; overflow: hidden; }
+.gis-draw-mode .gis-btn { border: none; border-radius: 0; padding: 0 7px; }
+.gis-draw-mode .gis-btn[aria-checked="true"] { background: rgba(94, 240, 200, 0.22); color: var(--gis-accent); }
+
+/* ── Gear menu ──────────────────────────────────────────────────────────────────────────── */
+/* Four titled sections laid out as columns that wrap: on a desktop the menu is two or four abreast
+   and a third the height of a single list; on a phone they stack (and the menu becomes a sheet). */
+.gis-menu {
+  top: 52px; left: 50%; transform: translateX(-50%); padding: 10px 16px 12px; max-width: 96vw; box-sizing: border-box;
+  display: none; flex-direction: row; flex-wrap: wrap; gap: 10px 26px; font-size: 11px;
+}
+.gis-menu-section { display: flex; flex-direction: column; gap: 7px; min-width: 240px; }
+.gis-menu-section > h3 {
+  margin: 0 0 1px; padding-bottom: 3px; border-bottom: 1px solid var(--gis-hairline);
+  font: inherit; font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--gis-accent); opacity: 0.85;
+}
+.gis-menu-row { display: flex; align-items: center; gap: 8px; min-height: 22px; }
+.gis-menu-label { width: 64px; flex: none; text-align: right; color: var(--gis-text-dim); letter-spacing: 0.5px; }
+
+/* ── Search ─────────────────────────────────────────────────────────────────────────────── */
+.gis-search {
+  top: 52px; left: 50%; transform: translateX(-50%); width: 320px; max-width: calc(100vw - 24px);
+  padding: 8px; display: none; flex-direction: column; gap: 6px; font-size: 11px;
+}
+.gis-search input { padding: 5px 8px; font-size: 13px; width: 100%; box-sizing: border-box; }
+.gis-search-list { display: flex; flex-direction: column; gap: 1px; max-height: 50vh; overflow-y: auto; }
+.gis-search-hit { display: flex; justify-content: space-between; gap: 8px; padding: 4px 6px; border-radius: 4px; cursor: pointer; }
+.gis-search-hit[aria-selected="true"] { background: rgba(94, 240, 200, 0.18); }
+.gis-search-hit > span:last-child { color: var(--gis-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.gis-search-hint { color: var(--gis-text-muted); font-size: 10px; padding: 0 2px; }
+
+/* ── Active-overlay chips ───────────────────────────────────────────────────────────────── */
+.gis-chips {
+  position: fixed; z-index: 9; top: 50px; left: 0; right: 0; padding: 0 12px; pointer-events: none;
+  display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; font-family: var(--gis-font);
+}
+.gis-chip {
+  pointer-events: auto; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; height: 20px;
+  padding: 0 7px 0 6px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.18);
+  background: var(--gis-panel-bg); color: var(--gis-text); font-size: 10px; font-family: inherit; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.gis-chip .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.gis-chip .x { color: var(--gis-text-muted); margin-left: 2px; }
+
+/* ── Keyboard help ──────────────────────────────────────────────────────────────────────── */
+.gis-help {
+  top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 14px 18px; display: none;
+  font-size: 12px; min-width: 300px; max-width: calc(100vw - 24px); line-height: 1.5;
+}
+.gis-help > h3 { margin: 0 0 8px; font: inherit; color: var(--gis-accent); letter-spacing: 0.5px; display: flex; justify-content: space-between; }
+.gis-help .x { color: var(--gis-text-muted); font-size: 14px; }
+.gis-help-table { display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; }
+.gis-help-table kbd {
+  color: var(--gis-text); background: var(--gis-ctrl-bg); border: 1px solid var(--gis-border); border-radius: 4px;
+  padding: 0 6px; font-family: inherit; font-size: 11px; white-space: nowrap; justify-self: start;
+}
+.gis-help-table span { color: #b8c8cc; }
+
+/* ── Legend ─────────────────────────────────────────────────────────────────────────────── */
+.gis-legend { left: 12px; bottom: 40px; padding: 7px 9px; font-size: 10px; }
+.gis-legend-title { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.gis-legend-title > div { opacity: 0.85; letter-spacing: 0.5px; flex: 1; }
+.gis-legend .gis-link { flex: none; font-size: 14px; line-height: 1; }
+.gis-swatch { width: 200px; height: 11px; border-radius: 2px; border: 1px solid rgba(255, 255, 255, 0.25); }
+.gis-swatch.thin { height: 5px; }
+.gis-ticks { display: flex; justify-content: space-between; margin-top: 3px; }
+.gis-legend-stats { margin-top: 4px; color: var(--gis-text-stats); letter-spacing: 0.3px; }
+.gis-legend-note { display: none; margin-top: 4px; max-width: 200px; color: var(--gis-text-muted); font-style: italic; line-height: 1.35; white-space: normal; }
+.gis-legend-over { display: none; margin-top: 6px; padding-top: 5px; border-top: 1px solid var(--gis-hairline); }
+.gis-legend-over > div:first-child { opacity: 0.85; letter-spacing: 0.5px; margin-bottom: 3px; }
+
+/* ── Side panels: zoom stack, point/region readout, mesh flight, ENSO ──────────────────── */
+.gis-zoom { right: 12px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 4px; background: none; box-shadow: none; }
+.gis-zoom button {
+  cursor: pointer; background: var(--gis-panel-bg); color: var(--gis-text); border: 1px solid var(--gis-border); border-radius: 4px;
+  width: 26px; height: 26px; font-size: 14px; line-height: 1; padding: 0; font-family: inherit;
+}
+.gis-point { right: 12px; top: 64px; display: none; padding: 8px 10px; font-size: 11px; }
+.gis-mesh { left: 12px; top: 64px; display: none; padding: 8px 10px; font-size: 11px; }
+.gis-enso { left: 12px; top: 64px; display: none; padding: 8px 10px; font-size: 11px; }
+
+/* ── Page furniture ─────────────────────────────────────────────────────────────────────── */
+/* Bottom-right so it never collides with the top control bar (which wraps on narrow windows). */
+#status { position: fixed; bottom: 36px; right: 12px; z-index: 10; font-size: 12px; background: rgba(0, 0, 0, 0.5); padding: 6px 10px; border-radius: 6px; color: #cde; max-width: 40vw; text-align: right; }
+#desc { position: fixed; bottom: 12px; left: 12px; right: 12px; z-index: 10; font-size: 11px; color: rgba(255, 255, 255, 0.42); text-align: center; pointer-events: none; }
+/* The footer ignores the pointer so it never blocks map drags — but its links stay clickable. */
+#desc a, #desc button { pointer-events: auto; color: rgba(255, 255, 255, 0.65); }
+#desc button { cursor: pointer; background: none; border: none; padding: 0; font: inherit; text-decoration: underline; }
+/* Data credits — the one-line footer links here; every source the page can draw is listed. */
+#credits {
+  position: fixed; bottom: 36px; left: 50%; transform: translateX(-50%); z-index: 12; display: none;
+  max-width: min(640px, calc(100vw - 24px)); padding: 10px 14px; border-radius: 6px; font-size: 11px; line-height: 1.5;
+  color: #cde; background: rgba(8, 10, 14, 0.92); box-shadow: var(--gis-shadow);
+}
+#credits a { color: var(--gis-text-stats); }
+#credits .x { position: absolute; top: 4px; right: 8px; cursor: pointer; color: var(--gis-text-muted); background: none; border: none; font: inherit; font-size: 14px; }
+
+/* ── Phone layout ───────────────────────────────────────────────────────────────────────── */
+/* The control bar would wrap onto four or five rows at phone width, burying the map under its own
+   chrome. One horizontally scrollable row instead: every control stays reachable, and the map keeps
+   the screen. */
+@media (max-width: 820px) {
+  /* Even one line competes with the legend for the bottom edge on a phone. The same links live
+     behind the legend's ⓘ and the gear menu, which is the better read on a small screen anyway. */
+  #desc { display: none; }
+  /* Narrower and lower than the legend, which is appended after it and so paints on top: where the
+     two do meet in the corner, the one carrying the color scale wins. */
+  #status { max-width: 52vw; font-size: 11px; bottom: calc(10px + env(safe-area-inset-bottom)); }
+  .gis-bar {
+    top: 0; left: 0; right: 0; width: auto; max-width: 100vw; border-radius: 0;
+    flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none;
+    padding: 6px 8px; padding-top: calc(6px + env(safe-area-inset-top));
+  }
+  .gis-bar::-webkit-scrollbar { display: none; }
+  .gis-bar > * { flex: none; }
+  /* The bar scrolls sideways; a fade on its trailing edge says so while there is more to the right
+     (the script sets data-more while that is true). */
+  .gis-bar[data-more="1"] {
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+    mask-image: linear-gradient(to right, #000 calc(100% - 36px), transparent);
+  }
+  /* The gear menu becomes a bottom sheet: it is reached with a thumb, scrolls under it, and leaves
+     the map visible above. The pill is the sheet's grab-handle idiom. */
+  .gis-menu {
+    top: auto; bottom: 0; left: 0; right: 0; transform: none; max-width: none; z-index: 20;
+    border-radius: 14px 14px 0 0; max-height: 70vh; overflow-y: auto; background: rgba(8, 10, 14, 0.95);
+    padding: 8px 16px calc(14px + env(safe-area-inset-bottom));
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.5);
+  }
+  .gis-menu::before { content: ''; flex: 0 0 100%; max-width: 36px; height: 4px; margin: 0 auto 2px; border-radius: 2px; background: rgba(255, 255, 255, 0.3); }
+  .gis-menu-section { min-width: 0; width: 100%; }   /* sections stack */
+  .gis-menu-row { flex-wrap: wrap; }                  /* rows wrap */
+  .gis-search { top: 52px; left: 6px; right: 6px; transform: none; width: auto; }
+  .gis-chips { top: calc(48px + env(safe-area-inset-top)); }
+  .gis-point, .gis-mesh, .gis-enso { max-width: calc(100vw - 24px); }
+  .gis-legend { max-width: calc(100vw - 24px); bottom: calc(14px + env(safe-area-inset-bottom)); }
+}
+/* Finger-sized targets wherever the pointer is coarse: a 22 px button is a miss, and an input under
+   16 px is what triggers the iOS focus zoom the viewport tag is fighting. */
+@media (pointer: coarse) {
+  .gis-btn, .gis-draw button { min-height: 30px; }
+  .gis-bar select { min-height: 28px; }
+  .gis-menu select, .gis-menu input[type=date], .gis-menu input[type=number] { min-height: 30px; font-size: 16px; }
+  .gis-bar input[type=range], .gis-menu input[type=range] { height: 28px; }
+  .gis-menu input[type=checkbox] { width: 17px; height: 17px; }
+  .gis-chip { height: 28px; font-size: 12px; }
+  .gis-search input { font-size: 16px; }
+  .gis-zoom button { width: 38px; height: 38px; font-size: 18px; }
+}

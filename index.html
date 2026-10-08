@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- maximum-scale=1 is here for one specific reason: iOS Safari zooms the whole page in when a
+       small-font input takes focus, and there is no way back out of that zoom on a page whose only
+       scrollable surface is a map. viewport-fit=cover lets the chrome below claim the notch area
+       back with env(safe-area-inset-*). -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover" />
+  <title>Earth Explorer</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌍</text></svg>">
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <div id="status">Loading…</div>
+  <!-- One line. What each layer is, where it comes from and how to read it lives behind the
+       legend's ⓘ, per layer; the keyboard behind ?; the data credits behind the button here. -->
+  <div id="desc">Living-world explorer — ⓘ on the legend explains the layer · ? for keyboard · 📖 <a id="guide-link" href="https://taosengine.com/book/samples/geo_gis_explorer.html" target="_blank" rel="noopener">guide</a> · <a id="tutorials-link" href="https://taosengine.com/docs/tutorials/analysis/README.html" target="_blank" rel="noopener">analysis tutorials</a> · <button id="credits-btn" type="button" aria-controls="credits" aria-expanded="false">© data credits</button></div>
+  <div id="credits" role="dialog" aria-label="Data credits">
+    <button class="x" type="button" aria-label="Close">×</button>
+    <b>Data credits.</b>
+    Ocean &amp; climate fields: NOAA OISST, Coral Reef Watch, NCEP GFS &amp; WaveWatch III, PERSIANN-CDR, GPCP, GHCN-CAMS, CoastWatch chlorophyll, ETOPO relief, AVISO currents — via the NOAA ERDDAP hosts (NCEI, CoastWatch, PacIOOS) ·
+    Species occurrences: OBIS · Tagged-animal tracks: IOOS Animal Telemetry Network · Fishing effort: Global Fishing Watch ·
+    Tropical cyclones: NOAA/NWS National Hurricane Center · Wildfires: NIFC/WFIGS, NASA FIRMS (VIIRS), USDA Forest Service ·
+    Weather radar © <a href="https://www.rainviewer.com/" target="_blank" rel="noopener">RainViewer</a> ·
+    Boundaries &amp; places © <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (public domain) ·
+    Basemaps &amp; night lights © <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a> (CC BY 4.0) ·
+    Imagery: NASA GIBS (Blue Marble, true color), NOAA STAR (GOES), Esri World Imagery (attributed on screen while its tiles are shown).
+  </div>
+  <script type="module">
+    // Credits popover: footer button toggles it; its × or a click anywhere else closes it.
+    const btn = document.getElementById('credits-btn');
+    const box = document.getElementById('credits');
+    const show = (on) => { box.style.display = on ? 'block' : 'none'; btn.setAttribute('aria-expanded', String(on)); };
+    btn.addEventListener('click', () => show(box.style.display !== 'block'));
+    box.querySelector('.x').addEventListener('click', () => show(false));
+    window.addEventListener('pointerdown', (e) => {
+      if (box.style.display === 'block' && !box.contains(e.target) && e.target !== btn) { show(false); }
+    });
+  </script>
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>
