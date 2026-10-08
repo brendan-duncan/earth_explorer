@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 380" font-family="system-ui, -apple-system, sans-serif" font-size="13">
+  <rect width="940" height="380" fill="#ffffff"/>
+  <text x="470" y="26" text-anchor="middle" font-size="16" font-weight="600" fill="#111827">Time-lapse assembly — 45 years of committed history + a live, newest-first top-up</text>
+
+  <!-- Crossfade bubble -->
+  <rect x="560" y="46" width="236" height="38" rx="6" fill="#eef2ff" stroke="#a5b4fc"/>
+  <text x="678" y="62" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="11" fill="#374151">display = mix(A, B, blend)</text>
+  <text x="678" y="77" text-anchor="middle" font-size="10" fill="#6b7280">dates ease in instead of snapping</text>
+
+  <!-- Baked band -->
+  <text x="440" y="108" text-anchor="middle" font-size="11" fill="#1d4ed8">committed 1° monthly atlas (CoastWatch, baked in Node) — 1981-09 → 2026-07, 539 frames, one 360×97 020 PNG per variable</text>
+  <rect x="72" y="116" width="799" height="14" fill="#dbeafe" stroke="#60a5fa"/>
+
+  <!-- Axis -->
+  <line x1="60" y1="146" x2="880" y2="146" stroke="#94a3b8" stroke-width="1.5"/>
+  <g font-size="10.5" fill="#6b7280" text-anchor="middle">
+    <text x="60"  y="164">1981</text>
+    <text x="149" y="164">1986</text>
+    <text x="238" y="164">1991</text>
+    <text x="327" y="164">1996</text>
+    <text x="417" y="164">2001</text>
+    <text x="506" y="164">2006</text>
+    <text x="595" y="164">2011</text>
+    <text x="684" y="164">2016</text>
+    <text x="773" y="164">2021</text>
+    <text x="864" y="164">2026</text>
+  </g>
+
+  <!-- Live band -->
+  <rect x="758" y="178" width="117" height="14" fill="#dcfce7" stroke="#4ade80"/>
+  <rect x="866" y="174" width="9" height="22" fill="#16a34a"/>
+  <text x="750" y="189" text-anchor="end" font-size="11" fill="#15803d">live NCEI ERDDAP — finalized 2020-02→, "prelim" for the last ~2 weeks</text>
+  <text x="870" y="212" text-anchor="end" font-size="11" fill="#15803d">default cadence: the newest 120 DAILY frames, fetched newest-first ▲</text>
+  <text x="470" y="232" text-anchor="middle" font-size="11" fill="#15803d">live dates the atlas already holds are skipped; all-null grids are dropped (a hole in the feed is not a frame)</text>
+
+  <!-- Playhead + frames A/B -->
+  <rect x="794" y="114" width="8" height="18" fill="#3b82f6"/>
+  <rect x="812" y="114" width="8" height="18" fill="#3b82f6"/>
+  <text x="792" y="110" text-anchor="end" font-size="10" fill="#1d4ed8">A</text>
+  <text x="822" y="110" font-size="10" fill="#1d4ed8">B</text>
+  <line x1="807" y1="86" x2="807" y2="198" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+  <!-- Notes -->
+  <rect x="60" y="250" width="820" height="112" rx="6" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="470" y="272" text-anchor="middle" font-size="11.5" fill="#374151">The display rides the NEWEST frame while older ones stream in behind it (followNewest) — until the user scrubs, plays or picks a day.</text>
+  <text x="470" y="292" text-anchor="middle" font-size="11.5" fill="#374151">A/B compare reuses frame B's texture slot for a pinned date and chooses A or B by which side of the divider the pixel is on.</text>
+  <text x="470" y="312" text-anchor="middle" font-size="11.5" fill="#6b7280">Flow overlays advect between their OWN dated frames nearest the same instant; the overlay layer snaps to its nearest frame</text>
+  <text x="470" y="328" text-anchor="middle" font-size="11.5" fill="#6b7280">within half the cadence (min 16 days when monthly) — or draws nothing. One clock drives base, overlays, flow, ENSO marker and terminator.</text>
+</svg>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" font-family="system-ui, -apple-system, sans-serif" font-size="12">
+  <rect width="900" height="560" fill="#ffffff"/>
+  <text x="450" y="26" text-anchor="middle" font-size="16" font-weight="600" fill="#111827">mapColor(uv) — composite order, bottom to top</text>
+
+  <!-- Stack, drawn top (last) to bottom (first) -->
+  <g font-size="11.5">
+    <rect x="60" y="46" width="420" height="24" rx="4" fill="#f1f5f9" stroke="#94a3b8"/>
+    <text x="72" y="63" fill="#374151">post: relief hillshade (spherical modes) · A/B compare seam</text>
+
+    <rect x="60" y="74" width="420" height="24" rx="4" fill="#fef9c3" stroke="#facc15"/>
+    <text x="72" y="91" fill="#374151">Niño 3.4 box outline (ENSO panel open)</text>
+
+    <rect x="60" y="102" width="420" height="24" rx="4" fill="#ccfbf1" stroke="#2dd4bf"/>
+    <text x="72" y="119" fill="#374151">user-drawn line / area / sample point</text>
+    <rect x="60" y="130" width="420" height="24" rx="4" fill="#ffedd5" stroke="#fb923c"/>
+    <text x="72" y="147" fill="#374151">wildfires — forests, hotspots, perimeters, incidents</text>
+    <rect x="60" y="158" width="420" height="24" rx="4" fill="#fee2e2" stroke="#f87171"/>
+    <text x="72" y="175" fill="#374151">tropical cyclones — cone, warnings, tracks, forecast</text>
+    <rect x="60" y="186" width="420" height="24" rx="4" fill="#fae8ff" stroke="#e879f9"/>
+    <text x="72" y="203" fill="#374151">ATN animal tracks</text>
+    <rect x="60" y="214" width="420" height="24" rx="4" fill="#f5f5f4" stroke="#a8a29e"/>
+    <text x="72" y="231" fill="#374151">borders + city labels (reference frame, under events)</text>
+    <rect x="60" y="242" width="420" height="24" rx="4" fill="#f5f5f4" stroke="#a8a29e"/>
+    <text x="72" y="259" fill="#374151">analysis vector arrows</text>
+
+    <rect x="60" y="270" width="420" height="24" rx="4" fill="#e0e7ff" stroke="#818cf8"/>
+    <text x="72" y="287" fill="#374151">overlay layer: iso-lines in its own colormap + hatching</text>
+    <rect x="60" y="298" width="420" height="24" rx="4" fill="#fef3c7" stroke="#fbbf24"/>
+    <text x="72" y="315" fill="#374151">day/night: × mix(0.2, 1, day) + city lights · (1 − day)</text>
+    <rect x="60" y="326" width="420" height="24" rx="4" fill="#dcfce7" stroke="#4ade80"/>
+    <text x="72" y="343" fill="#374151">radar echoes: mix(col, radar, a · 0.85)</text>
+    <rect x="60" y="354" width="420" height="24" rx="4" fill="#dbeafe" stroke="#60a5fa"/>
+    <text x="72" y="371" fill="#374151">flow trails: + currents · ocean mask, + wind</text>
+
+    <rect x="60" y="382" width="420" height="24" rx="4" fill="#ede9fe" stroke="#a78bfa"/>
+    <text x="72" y="399" fill="#374151">land: basemap over sea-only data / luminance-shaded over-land data</text>
+    <rect x="60" y="410" width="420" height="24" rx="4" fill="#ede9fe" stroke="#a78bfa"/>
+    <text x="72" y="427" fill="#374151">contours · significance stipple</text>
+    <rect x="60" y="438" width="420" height="24" rx="4" fill="#ede9fe" stroke="#a78bfa"/>
+    <text x="72" y="455" fill="#374151">LUT( quantize( remap( value ) ) ) — or imagery RGB</text>
+    <rect x="60" y="466" width="420" height="24" rx="4" fill="#ede9fe" stroke="#a78bfa"/>
+    <text x="72" y="483" fill="#374151">field A/B (crossfade or compare) · ÷ alpha · flood fill</text>
+    <rect x="60" y="494" width="420" height="24" rx="4" fill="#e7e5e4" stroke="#78716c"/>
+    <text x="72" y="511" fill="#374151">basemap (mip by wrap-safe derivatives) ← detail window</text>
+  </g>
+
+  <!-- Braces / notes -->
+  <g font-size="11" fill="#6b7280">
+    <line x1="492" y1="102" x2="492" y2="266" stroke="#94a3b8"/>
+    <text x="504" y="160">annotation rasters: straight alpha,</text>
+    <text x="504" y="175">equirect, cropped to the visible window,</text>
+    <text x="504" y="190">sampled through overlaySample() —</text>
+    <text x="504" y="205">zero outside the window, never wrapped</text>
+    <text x="504" y="228">"what is being looked at" goes on top:</text>
+    <text x="504" y="243">events above reference, the user's shape last</text>
+
+    <line x1="492" y1="270" x2="492" y2="378" stroke="#94a3b8"/>
+    <text x="504" y="300">all derivatives (fwidth) sit under</text>
+    <text x="504" y="315">UNIFORM tests only — the per-pixel</text>
+    <text x="504" y="330">mask gates the final blend, never the</text>
+    <text x="504" y="345">branch that differentiates</text>
+
+    <line x1="492" y1="382" x2="492" y2="518" stroke="#94a3b8"/>
+    <text x="504" y="420">the value path: everything here is in</text>
+    <text x="504" y="435">normalized [0,1] units of the layer's</text>
+    <text x="504" y="450">byte encoding, remapped into display</text>
+    <text x="504" y="465">units only after the sparse test</text>
+  </g>
+  <text x="450" y="546" text-anchor="middle" font-size="11" fill="#6b7280">Called unconditionally from fs() in every mode, so its screen-space derivatives are always legal.</text>
+</svg>

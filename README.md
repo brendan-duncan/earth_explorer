@@ -26,6 +26,13 @@ npm test           # vitest unit tests
 npm run build      # type-check + production build → dist/
 ```
 
+## Docs
+
+- [Deep-dive](docs/deep-dive.md): how the app works, from the data feeds to the display shader.
+- [Analysis reference](docs/analysis.md): the analysis language's value types and every node.
+- [Analysis tutorials](docs/tutorials/README.md): five guided lessons in the graph editor.
+- [Design notes](docs/design/): background on the analysis graph and the forecaster.
+
 ## Deploy
 
 Pushing a version tag (`git tag v0.1.0 && git push origin v0.1.0`) builds and publishes to GitHub

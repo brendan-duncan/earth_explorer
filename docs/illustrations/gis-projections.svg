@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 540" font-family="system-ui, -apple-system, sans-serif" font-size="13">
+  <rect width="940" height="540" fill="#ffffff"/>
+  <defs>
+    <marker id="parr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <text x="470" y="26" text-anchor="middle" font-size="16" font-weight="600" fill="#111827">Projections — every mode is a different pixel → uv inverse</text>
+
+  <!-- ── Pipeline row ──────────────────────────────────────────────────────── -->
+  <g>
+    <rect x="9"   y="60" width="132" height="54" rx="6" fill="#f8fafc" stroke="#94a3b8"/>
+    <text x="75"  y="83" text-anchor="middle" font-size="11.5" font-weight="600">screen pixel</text>
+    <text x="75"  y="100" text-anchor="middle" font-size="10.5" fill="#6b7280">fragment coord</text>
+
+    <rect x="167" y="60" width="132" height="54" rx="6" fill="#f8fafc" stroke="#94a3b8"/>
+    <text x="233" y="83" text-anchor="middle" font-size="11.5" font-weight="600">letterbox</text>
+    <text x="233" y="100" text-anchor="middle" font-size="10.5" fill="#6b7280">aspect = W / H</text>
+
+    <rect x="325" y="60" width="132" height="54" rx="6" fill="#eef2ff" stroke="#a5b4fc"/>
+    <text x="391" y="83" text-anchor="middle" font-size="11.5" font-weight="600">map frame [0,1]²</text>
+    <text x="391" y="100" text-anchor="middle" font-size="10.5" fill="#6b7280">center + zoom</text>
+
+    <rect x="483" y="60" width="132" height="54" rx="6" fill="#eef2ff" stroke="#a5b4fc"/>
+    <text x="549" y="83" text-anchor="middle" font-size="11.5" font-weight="600">plane coords</text>
+    <text x="549" y="100" text-anchor="middle" font-size="10.5" fill="#6b7280">x ∈ ±W,  y ∈ ±H</text>
+
+    <rect x="641" y="60" width="132" height="54" rx="6" fill="#fef3c7" stroke="#fbbf24"/>
+    <text x="707" y="83" text-anchor="middle" font-size="11.5" font-weight="600">invProject</text>
+    <text x="707" y="100" text-anchor="middle" font-size="10.5" fill="#6b7280">→ lon / lat + valid</text>
+
+    <rect x="799" y="60" width="132" height="54" rx="6" fill="#f0fdf4" stroke="#86efac"/>
+    <text x="865" y="83" text-anchor="middle" font-size="11.5" font-weight="600">equirect uv</text>
+    <text x="865" y="100" text-anchor="middle" font-size="10.5" fill="#6b7280">→ mapColor()</text>
+
+    <line x1="141" y1="87" x2="165" y2="87" stroke="#64748b" stroke-width="1.5" marker-end="url(#parr)"/>
+    <line x1="299" y1="87" x2="323" y2="87" stroke="#64748b" stroke-width="1.5" marker-end="url(#parr)"/>
+    <line x1="457" y1="87" x2="481" y2="87" stroke="#64748b" stroke-width="1.5" marker-end="url(#parr)"/>
+    <line x1="615" y1="87" x2="639" y2="87" stroke="#64748b" stroke-width="1.5" marker-end="url(#parr)"/>
+    <line x1="773" y1="87" x2="797" y2="87" stroke="#64748b" stroke-width="1.5" marker-end="url(#parr)"/>
+  </g>
+  <text x="470" y="140" text-anchor="middle" font-size="11" fill="#6b7280">Pan and zoom operate in the map frame — the same math for every projection. The projection only appears in the</text>
+  <text x="470" y="156" text-anchor="middle" font-size="11" fill="#6b7280">plane→lon/lat step: cylindrical modes wrap longitude while panning, bounded ones clamp and reject outside pixels.</text>
+
+  <!-- ── Gallery: 2 rows × 3 cells (cells x=30/330/630, y=186/362, w=280 h=156) ── -->
+  <!-- Equirect -->
+  <g transform="translate(30,186)">
+    <text x="140" y="16" text-anchor="middle" font-weight="600" font-size="12.5">Equirect (plate carrée)</text>
+    <rect x="50" y="32" width="180" height="90" fill="#dbeafe" stroke="#60a5fa"/>
+    <line x1="140" y1="32" x2="140" y2="122" stroke="#93c5fd" stroke-width="0.8"/>
+    <line x1="50" y1="77" x2="230" y2="77" stroke="#93c5fd" stroke-width="0.8"/>
+    <text x="140" y="140" text-anchor="middle" font-size="10.5" fill="#6b7280">native grid · uv = plane · wraps</text>
+  </g>
+
+  <!-- Mercator -->
+  <g transform="translate(330,186)">
+    <text x="140" y="16" text-anchor="middle" font-weight="600" font-size="12.5">Mercator</text>
+    <rect x="90" y="27" width="100" height="100" fill="#dbeafe" stroke="#60a5fa"/>
+    <line x1="90" y1="77" x2="190" y2="77" stroke="#93c5fd" stroke-width="0.8"/>
+    <line x1="90" y1="47" x2="190" y2="47" stroke="#93c5fd" stroke-width="0.8"/>
+    <line x1="90" y1="107" x2="190" y2="107" stroke="#93c5fd" stroke-width="0.8"/>
+    <text x="140" y="140" text-anchor="middle" font-size="10.5" fill="#6b7280">conformal, ±85° · wraps · poles inflate</text>
+  </g>
+
+  <!-- Mollweide -->
+  <g transform="translate(630,186)">
+    <text x="140" y="16" text-anchor="middle" font-weight="600" font-size="12.5">Mollweide</text>
+    <ellipse cx="140" cy="77" rx="90" ry="45" fill="#dcfce7" stroke="#4ade80"/>
+    <line x1="140" y1="32" x2="140" y2="122" stroke="#86efac" stroke-width="0.8"/>
+    <text x="140" y="140" text-anchor="middle" font-size="10.5" fill="#6b7280">equal-area ellipse · clamped</text>
+  </g>
+
+  <!-- Equal Earth -->
+  <g transform="translate(30,362)">
+    <text x="140" y="16" text-anchor="middle" font-weight="600" font-size="12.5">Equal Earth</text>
+    <path d="M 50 77 C 50 46 90 32 140 32 C 190 32 230 46 230 77 C 230 108 190 122 140 122 C 90 122 50 108 50 77 Z"
+          fill="#dcfce7" stroke="#4ade80"/>
+    <line x1="140" y1="32" x2="140" y2="122" stroke="#86efac" stroke-width="0.8"/>
+    <text x="140" y="140" text-anchor="middle" font-size="10.5" fill="#6b7280">equal-area, flatter poles · Newton inverse</text>
+  </g>
+
+  <!-- Arctic -->
+  <g transform="translate(330,362)">
+    <text x="140" y="16" text-anchor="middle" font-weight="600" font-size="12.5">Arctic</text>
+    <circle cx="140" cy="77" r="46" fill="#fce7f3" stroke="#f472b6"/>
+    <circle cx="140" cy="77" r="2.5" fill="#be185d"/>
+    <line x1="140" y1="77" x2="140" y2="123" stroke="#f472b6" stroke-width="1"/>
+    <text x="152" y="120" font-size="9.5" fill="#be185d">0°</text>
+    <text x="140" y="140" text-anchor="middle" font-size="10.5" fill="#6b7280">N stereographic to equator · Greenwich ↓</text>
+  </g>
+
+  <!-- Antarctic -->
+  <g transform="translate(630,362)">
+    <text x="140" y="16" text-anchor="middle" font-weight="600" font-size="12.5">Antarctic</text>
+    <circle cx="140" cy="77" r="46" fill="#fce7f3" stroke="#f472b6"/>
+    <circle cx="140" cy="77" r="2.5" fill="#be185d"/>
+    <line x1="140" y1="77" x2="140" y2="31" stroke="#f472b6" stroke-width="1"/>
+    <text x="152" y="40" font-size="9.5" fill="#be185d">0°</text>
+    <text x="140" y="140" text-anchor="middle" font-size="10.5" fill="#6b7280">S stereographic to equator · Greenwich ↑</text>
+  </g>
+</svg>

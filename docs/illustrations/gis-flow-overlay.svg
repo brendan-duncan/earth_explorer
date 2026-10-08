@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 430" font-family="system-ui, -apple-system, sans-serif" font-size="13">
+  <rect width="940" height="430" fill="#ffffff"/>
+  <defs>
+    <marker id="farr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <text x="470" y="26" text-anchor="middle" font-size="16" font-weight="600" fill="#111827">Currents &amp; wind — GPU particle trails in equirect uv space</text>
+
+  <!-- Particle buffer -->
+  <rect x="30" y="66" width="250" height="66" rx="6" fill="#faf5ff" stroke="#c4b5fd"/>
+  <text x="155" y="87" text-anchor="middle" font-weight="600" font-size="12.5">Particle buffer — 9–16k × vec4</text>
+  <g font-family="ui-monospace, Consolas, monospace" font-size="11" fill="#374151">
+    <text x="155" y="107" text-anchor="middle">xy = uv position on the map</text>
+    <text x="155" y="124" text-anchor="middle">z = age · w = respawn seed</text>
+  </g>
+
+  <!-- Dated frames -->
+  <rect x="30" y="166" width="250" height="58" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="155" y="187" text-anchor="middle" font-weight="600" font-size="12.5">Vector frames A, B</text>
+  <text x="155" y="205" text-anchor="middle" font-size="11" fill="#6b7280">dated snapshots straddling the timeline</text>
+
+  <!-- Advect compute -->
+  <rect x="330" y="66" width="290" height="176" rx="6" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="475" y="87" text-anchor="middle" font-weight="600" font-size="12.5">ADVECT — compute pass (wg 64)</text>
+  <g font-family="ui-monospace, Consolas, monospace" font-size="10.5" fill="#374151">
+    <text x="346" y="110">s   = mix(A(uv), B(uv), blend)</text>
+    <text x="346" y="129">vel = (s.rg−0.5)·2·uMax   // m/s</text>
+    <text x="346" y="148">duv = (vel.x/cos φ, −vel.y)</text>
+    <text x="346" y="167">      · speedScale · dt</text>
+    <text x="346" y="186">age += dt;  die: land|old|slow</text>
+    <text x="346" y="205">respawn at hash(seed) uv,</text>
+    <text x="346" y="224">staggered age (no pulsing)</text>
+  </g>
+
+  <line x1="280" y1="99"  x2="328" y2="99"  stroke="#64748b" stroke-width="1.5" marker-end="url(#farr)"/>
+  <line x1="280" y1="195" x2="328" y2="195" stroke="#64748b" stroke-width="1.5" marker-end="url(#farr)"/>
+
+  <!-- Trail texture -->
+  <rect x="660" y="66" width="250" height="176" rx="6" fill="#fef3c7" stroke="#fbbf24"/>
+  <text x="785" y="87" text-anchor="middle" font-weight="600" font-size="12.5">Trail texture — equirect rgba8</text>
+  <rect x="676" y="100" width="218" height="40" rx="4" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="785" y="117" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">1 · FADE (fullscreen)</text>
+  <text x="785" y="133" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="10.5" fill="#6b7280">dst ×= (1 − fadeRate)</text>
+  <rect x="676" y="150" width="218" height="76" rx="4" fill="#ffffff" stroke="#d1d5db"/>
+  <text x="785" y="167" text-anchor="middle" font-size="11" font-weight="600" fill="#374151">2 · DRAW (instanced quads)</text>
+  <text x="785" y="184" text-anchor="middle" font-size="10.5" fill="#6b7280">soft round dot per particle</text>
+  <text x="785" y="200" text-anchor="middle" font-size="10.5" fill="#6b7280">additive · brightness ∝ speed</text>
+  <text x="785" y="216" text-anchor="middle" font-size="10.5" fill="#6b7280">hue = per-overlay tint</text>
+
+  <line x1="620" y1="154" x2="658" y2="154" stroke="#64748b" stroke-width="1.5" marker-end="url(#farr)"/>
+  <text x="639" y="146" text-anchor="middle" font-size="10" fill="#6b7280">stamp</text>
+
+  <!-- Frame pairing note -->
+  <rect x="30" y="290" width="250" height="88" rx="6" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="155" y="311" text-anchor="middle" font-weight="600" font-size="12">Frame pairing</text>
+  <text x="155" y="329" text-anchor="middle" font-size="10.5" fill="#6b7280">syncFlowToDate() picks the frames</text>
+  <text x="155" y="345" text-anchor="middle" font-size="10.5" fill="#6b7280">bracketing the timeline's moment;</text>
+  <text x="155" y="361" text-anchor="middle" font-size="10.5" fill="#6b7280">blend = fractional position between</text>
+
+  <!-- Composite -->
+  <line x1="785" y1="242" x2="785" y2="288" stroke="#64748b" stroke-width="1.5" marker-end="url(#farr)"/>
+  <rect x="330" y="290" width="580" height="88" rx="6" fill="#eef2ff" stroke="#a5b4fc"/>
+  <text x="620" y="313" text-anchor="middle" font-weight="600" font-size="12.5">Composited in mapColor(uv)</text>
+  <text x="620" y="333" text-anchor="middle" font-family="ui-monospace, Consolas, monospace" font-size="11" fill="#374151">col += trail(uv) · oceanMask      // currents ocean-only, wind everywhere</text>
+  <text x="620" y="356" text-anchor="middle" font-size="11" fill="#6b7280">trails live in uv space → they work unchanged on the flat map, in every projection,</text>
+  <text x="620" y="371" text-anchor="middle" font-size="11" fill="#6b7280">and on the rotating globe — no screen-space bookkeeping, no re-projection.</text>
+</svg>

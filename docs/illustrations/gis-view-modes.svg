@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 726 452" font-family="system-ui, -apple-system, sans-serif" font-size="12">
+  <rect width="726" height="452" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <text x="363" y="26" text-anchor="middle" font-size="16" font-weight="600" fill="#111827">Three ways to put the Earth on screen</text>
+
+  <!-- Column boxes -->
+  <g>
+    <rect x="16" y="46" width="222" height="300" rx="8" fill="#eef2ff" stroke="#a5b4fc"/>
+    <rect x="252" y="46" width="222" height="300" rx="8" fill="#eef2ff" stroke="#a5b4fc"/>
+    <rect x="488" y="46" width="222" height="300" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-dasharray="5 3"/>
+  </g>
+  <g font-weight="600" font-size="13" text-anchor="middle" fill="#111827">
+    <text x="127" y="68">Flat — 6 projections</text>
+    <text x="363" y="68">Globe (default)</text>
+    <text x="599" y="68">Earth, ray-marched</text>
+  </g>
+  <g font-size="10.5" text-anchor="middle" fill="#6b7280">
+    <text x="127" y="84">?proj=map|mercator|mollweide|…</text>
+    <text x="363" y="84">?proj=globe · orthographic</text>
+    <text x="599" y="84">?proj=earth · hidden from picker</text>
+  </g>
+
+  <!-- Flat steps -->
+  <g font-size="11" text-anchor="middle" fill="#374151">
+    <rect x="36" y="98" width="182" height="26" rx="4" fill="#fff" stroke="#c7d2fe"/><text x="127" y="115">pixel → letterbox (map aspect)</text>
+    <line x1="127" y1="124" x2="127" y2="136" stroke="#64748b" marker-end="url(#a)"/>
+    <rect x="36" y="138" width="182" height="26" rx="4" fill="#fff" stroke="#c7d2fe"/><text x="127" y="155">map frame: center + zoom</text>
+    <line x1="127" y1="164" x2="127" y2="176" stroke="#64748b" marker-end="url(#a)"/>
+    <rect x="36" y="178" width="182" height="26" rx="4" fill="#fff" stroke="#c7d2fe"/><text x="127" y="195">plane → invProject → lon,lat</text>
+    <line x1="127" y1="204" x2="127" y2="216" stroke="#64748b" marker-end="url(#a)"/>
+    <rect x="36" y="218" width="182" height="26" rx="4" fill="#fff" stroke="#c7d2fe"/><text x="127" y="235">equirect uv → mapColor</text>
+    <text x="127" y="270" fill="#6b7280">zoom ≥ 2048: CPU (f64) supplies</text>
+    <text x="127" y="285" fill="#6b7280">center uv as hi+lo f32 and the</text>
+    <text x="127" y="300" fill="#6b7280">projection Jacobian — each pixel</text>
+    <text x="127" y="315" fill="#6b7280">walks a local affine model</text>
+    <text x="127" y="333" fill="#6b7280">max zoom 131 072 (~400 m wide)</text>
+  </g>
+
+  <!-- Globe steps -->
+  <g font-size="11" text-anchor="middle" fill="#374151">
+    <rect x="272" y="98" width="182" height="26" rx="4" fill="#fff" stroke="#c7d2fe"/><text x="363" y="115">pixel → disc q / (1.12·zoom)</text>
+    <line x1="363" y1="124" x2="363" y2="136" stroke="#64748b" marker-end="url(#a)"/>
+    <rect x="272" y="138" width="182" height="26" rx="4" fill="#fff" stroke="#c7d2fe"/><text x="363" y="155">rotX(tilt) → rotY(yaw)</text>
+    <line x1="363" y1="164" x2="363" y2="176" stroke="#64748b" marker-end="url(#a)"/>
+    <rect x="272" y="178" width="182" height="26" rx="4" fill="#fff" stroke="#c7d2fe"/><text x="363" y="195">march ETOPO shell 48 + 5 bisect</text>
+    <line x1="363" y1="204" x2="363" y2="216" stroke="#64748b" marker-end="url(#a)"/>
+    <rect x="272" y="218" width="182" height="26" rx="4" fill="#fff" stroke="#c7d2fe"/><text x="363" y="235">surface dir → uv → mapColor</text>
+    <text x="363" y="270" fill="#6b7280">25× relief, fading out past</text>
+    <text x="363" y="285" fill="#6b7280">zoom 16 → smooth sphere at 32</text>
+    <text x="363" y="300" fill="#6b7280">+ slope hillshade on land</text>
+    <text x="363" y="333" fill="#6b7280">zoom 0.3 … 2048</text>
+  </g>
+
+  <!-- Earth steps -->
+  <g font-size="11" text-anchor="middle" fill="#374151">
+    <rect x="508" y="98" width="182" height="26" rx="4" fill="#fff" stroke="#cbd5e1"/><text x="599" y="115">orbit cam: target, tilt, heading</text>
+    <line x1="599" y1="124" x2="599" y2="136" stroke="#64748b" marker-end="url(#a)"/>
+    <rect x="508" y="138" width="182" height="26" rx="4" fill="#fff" stroke="#cbd5e1"/><text x="599" y="155">eye + basis on CPU → ray</text>
+    <line x1="599" y1="164" x2="599" y2="176" stroke="#64748b" marker-end="url(#a)"/>
+    <rect x="508" y="178" width="182" height="26" rx="4" fill="#fff" stroke="#cbd5e1"/><text x="599" y="195">analytic shell/sea span, 64 + 6</text>
+    <line x1="599" y1="204" x2="599" y2="216" stroke="#64748b" marker-end="url(#a)"/>
+    <rect x="508" y="218" width="182" height="26" rx="4" fill="#fff" stroke="#cbd5e1"/><text x="599" y="235">surface dir → uv → mapColor</text>
+    <text x="599" y="270" fill="#6b7280">oblique views + horizon, but</text>
+    <text x="599" y="285" fill="#6b7280">0.25° relief melts into plateaus</text>
+    <text x="599" y="300" fill="#6b7280">at low altitude — kept as an</text>
+    <text x="599" y="315" fill="#6b7280">experiment, not offered</text>
+  </g>
+
+
+  <rect x="16" y="362" width="694" height="44" rx="6" fill="#eef2ff" stroke="#a5b4fc"/>
+  <text x="363" y="381" text-anchor="middle" font-size="12" fill="#374151">One fullscreen triangle, one fragment shader: each mode only decides which equirect uv a pixel sees.</text>
+  <text x="363" y="398" text-anchor="middle" font-size="11" fill="#6b7280">Every layer, overlay and annotation is written once, against uv — and is correct in all of them.</text>
+
+  <text x="363" y="436" text-anchor="middle" font-size="11" fill="#6b7280">Picks invert the same way on the CPU: flatProj.inverse · uvAtGlobeScreen · earthPick (analytic sphere)</text>
+</svg>

@@ -96,7 +96,7 @@ export function installAnalysisPanel(opts: AnalysisPanelOptions): AnalysisPanel 
   // The built docs site sits beside samples/ in the deployed tree; the host swaps in a
   // GitHub fallback when the site isn't there (local dev) — see the explorer's link probe.
   docsLink.id = 'analysis-docs-link';
-  docsLink.href = 'https://taosengine.com/docs/tutorials/analysis/README.html';
+  docsLink.href = 'https://github.com/brendan-duncan/earth_explorer/blob/main/docs/tutorials/README.md';
   docsLink.target = '_blank';
   docsLink.rel = 'noopener';
   docsLink.title = 'Analysis tutorials + the full node reference';
