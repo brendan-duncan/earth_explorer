@@ -13,6 +13,13 @@ composites and time series over the data stacks.
 
 ![Earth Explorer](docs/img/earth_explorer.png)
 
+## Docs
+
+- [Deep-dive](docs/deep-dive.md): how the app works, from the data feeds to the display shader.
+- [Analysis reference](docs/analysis.md): the analysis language's value types and every node.
+- [Analysis tutorials](docs/tutorials/README.md): five guided lessons in the graph editor.
+- [Design notes](docs/design/): background on the analysis graph and the forecaster.
+
 ## Requirements
 
 A browser with WebGPU (Chrome/Edge 113+, Safari 26+, Firefox 141+ on Windows).
@@ -25,13 +32,6 @@ npm run dev        # http://localhost:5173/
 npm test           # vitest unit tests
 npm run build      # type-check + production build → dist/
 ```
-
-## Docs
-
-- [Deep-dive](docs/deep-dive.md): how the app works, from the data feeds to the display shader.
-- [Analysis reference](docs/analysis.md): the analysis language's value types and every node.
-- [Analysis tutorials](docs/tutorials/README.md): five guided lessons in the graph editor.
-- [Design notes](docs/design/): background on the analysis graph and the forecaster.
 
 ## Deploy
 
