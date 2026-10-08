@@ -2,6 +2,8 @@
 
 A living-world map of ocean, atmosphere and climate data, rendered with WebGPU in the browser.
 
+[Run Earth Explorer](https://brendan-duncan.github.io/earth_explorer/)
+
 Sea-surface temperature and anomaly, sea ice, chlorophyll, coral heat stress, waves, GFS weather,
 rainfall, satellite true color and GOES imagery, drawn on a flat map (equirect, Mercator,
 Mollweide, Equal Earth, polar) or a relief globe. Overlays add currents and wind particle trails,
@@ -28,8 +30,8 @@ npm run build      # type-check + production build → dist/
 
 ## Deploy
 
-Every push to `main` builds and publishes to GitHub Pages via
-[.github/workflows/pages.yml](.github/workflows/pages.yml). The build uses relative paths, so it
+Pushing a version tag (`git tag v0.1.0 && git push origin v0.1.0`) builds and publishes to GitHub
+Pages via [.github/workflows/pages.yml](.github/workflows/pages.yml). The build uses relative paths, so it
 also runs from any subdirectory of another static host: copy `dist/` there.
 
 ## Layout

@@ -1,10 +1,14 @@
-# Builds the app and publishes dist/ to GitHub Pages on every push to main.
-# One-time setup: repo Settings → Pages → Build and deployment → Source: "GitHub Actions".
+# Builds the app and publishes dist/ to GitHub Pages when a version tag (v1.0.0, v0.2, …) is pushed.
+# One-time setup:
+#  - Settings → Pages → Build and deployment → Source: "GitHub Actions".
+#  - Settings → Environments → github-pages → Deployment branches and tags: add a TAG rule `v*`.
+#    The environment only allows the default branch out of the box, so a tag deploy is rejected
+#    until that rule exists.
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:
