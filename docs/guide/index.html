@@ -518,7 +518,7 @@ window.PE = (function () {
       helpers: one loader per data feed in <code>src/live/</code>, an analysis engine in
       <code>src/analysis/</code>, and a handful of panels. It has no backend; it is a static web
       page.</p>
-    <div class="svgcard"><img width="960" height="700" src="illustrations/gis-pipeline.svg" alt="Data pipeline diagram: live and baked feeds become GriddedFields, which feed the display shader, the overlays and the analysis engine" loading="lazy"></div>
+    <div class="svgcard"><img width="960" height="700" src="../illustrations/gis-pipeline.svg" alt="Data pipeline diagram: live and baked feeds become GriddedFields, which feed the display shader, the overlays and the analysis engine" loading="lazy"></div>
   </section>
 
   <section>
@@ -541,7 +541,7 @@ window.PE = (function () {
       the grid position for a screen pixel. Particle trails move across the grid. Storms, fires
       and borders are drawn into grid-aligned images. The analysis engine reads the grid's cells.
       None of them knows or cares which agency produced the numbers.</p>
-    <div class="svgcard"><img width="940" height="470" src="illustrations/gis-gridded-field.svg" alt="Diagram of the GriddedField contract: an equirect texture with value and mask channels plus a CPU copy, consumed by the shader, projections, flow, overlays and analysis" loading="lazy"></div>
+    <div class="svgcard"><img width="940" height="470" src="../illustrations/gis-gridded-field.svg" alt="Diagram of the GriddedField contract: an equirect texture with value and mask channels plus a CPU copy, consumed by the shader, projections, flow, overlays and analysis" loading="lazy"></div>
     <p>Feeds disagree about conventions: longitude 0..360 or ±180, north-up or south-up, global or
       a band. Wave data stops at ±77°, the baked currents at ±64.7°. The loader works out each
       response's grid spacing from the coordinates it actually returned, sizes a whole-globe image
@@ -996,7 +996,7 @@ flipped = north - south > <span class="n">2</span>;   <span class="c">// Tibet m
       readback has a trap: the 1° atlas is <strong>360 × 97,020 pixels</strong>, and a canvas larger
       than the browser's limit doesn't throw an error. It silently reads back all zeros, which would
       mark every cell "no data". So the CPU decode runs in slabs of at most 16,384 rows.</p>
-    <div class="svgcard"><img width="940" height="380" src="illustrations/gis-timeline.svg" alt="Timeline assembly: the baked monthly atlas from 1981, followed by live frames streamed from ERDDAP up to today" loading="lazy"></div>
+    <div class="svgcard"><img width="940" height="380" src="../illustrations/gis-timeline.svg" alt="Timeline assembly: the baked monthly atlas from 1981, followed by live frames streamed from ERDDAP up to today" loading="lazy"></div>
     <p>Before any atlas arrives, a single baked 720 × 360 snapshot paints the screen, so the first
       thing you see is real data, not a spinner. A <span class="mono">?layer=</span> link to
       something else can race that snapshot, so it only claims the screen if sea-surface
@@ -1137,7 +1137,7 @@ flipped = north - south > <span class="n">2</span>;   <span class="c">// Tibet m
       need is bound at once: 20 resources in one bind group, with a 1×1 transparent placeholder for
       anything not in use, so the layout never changes. The bind group is rebuilt only when a key made
       of the frame dates and each overlay's generation counter changes.</p>
-    <div class="svgcard"><img width="900" height="560" src="illustrations/gis-composite-order.svg" alt="Composite order: basemap, data value, colormap and contours, overlay layer, flow trails, radar, day/night, then annotations from borders to drawn shapes" loading="lazy"></div>
+    <div class="svgcard"><img width="900" height="560" src="../illustrations/gis-composite-order.svg" alt="Composite order: basemap, data value, colormap and contours, overlay layer, flow trails, radar, day/night, then annotations from borders to drawn shapes" loading="lazy"></div>
     <ol class="mech">
       <li><span><span class="h">Basemap.</span> Day imagery with a land mask, or streamed
         high-resolution imagery when zoomed in. Its mip level is chosen from the uv derivatives,
@@ -2341,9 +2341,9 @@ uv = vec2(fract(u.lin0.x + uvRel.x), clamp(u.lin0.y + uvRel.y, <span class="n">0
         Coverage floors, date de-duplication and the Tibet probe all exist because the data said
         otherwise.</span></li>
     </ol>
-    <p>For the full technical detail, the repository's <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/devdocs/deep-dive.md">deep dive</a> covers
-      every subsystem, the <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/devdocs/analysis.md">analysis reference</a> documents every op, and the
-      <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/devdocs/tutorials/README.md">tutorials</a> walk through building programs in the graph
+    <p>For the full technical detail, the repository's <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/docs/deep-dive.md">deep dive</a> covers
+      every subsystem, the <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/docs/analysis.md">analysis reference</a> documents every op, and the
+      <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/docs/tutorials/README.md">tutorials</a> walk through building programs in the graph
       editor.</p>
   </section>
 
@@ -2384,8 +2384,8 @@ uv = vec2(fract(u.lin0.x + uvRel.x), clamp(u.lin0.y + uvRel.y, <span class="n">0
 <footer>
   <div class="wrap">
     <p>Earth Explorer is open source: <a href="https://github.com/brendan-duncan/earth_explorer">github.com/brendan-duncan/earth_explorer</a>.
-      For the full technical reference see the <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/devdocs/deep-dive.md">deep dive</a>, the
-      <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/devdocs/analysis.md">analysis reference</a> and the <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/devdocs/tutorials/README.md">tutorials</a>.</p>
+      For the full technical reference see the <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/docs/deep-dive.md">deep dive</a>, the
+      <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/docs/analysis.md">analysis reference</a> and the <a href="https://github.com/brendan-duncan/earth_explorer/blob/main/docs/tutorials/README.md">tutorials</a>.</p>
     <p>Data: NOAA (OISST, Coral Reef Watch, WaveWatch III, GFS, PERSIANN-CDR, GPCP, GHCN-CAMS, CoastWatch,
       NHC, GOES via STAR), NASA GIBS, NIFC/WFIGS, USDA Forest Service, OBIS, US IOOS ATN, Global Fishing Watch,
       RainViewer, Natural Earth, ETOPO1, Esri World Imagery. Basemap &copy; Solar System Scope (CC BY 4.0).</p>

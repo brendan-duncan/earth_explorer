@@ -15,10 +15,10 @@ composites and time series over the data stacks.
 
 ## Docs
 
-- [Deep-dive](devdocs/deep-dive.md): how the app works, from the data feeds to the display shader.
-- [Analysis reference](devdocs/analysis.md): the analysis language's value types and every node.
-- [Analysis tutorials](devdocs/tutorials/README.md): five guided lessons in the graph editor.
-- [Design notes](devdocs/design/): background on the analysis graph and the forecaster.
+- [Deep-dive](docs/deep-dive.md): how the app works, from the data feeds to the display shader.
+- [Analysis reference](docs/analysis.md): the analysis language's value types and every node.
+- [Analysis tutorials](docs/tutorials/README.md): five guided lessons in the graph editor.
+- [Design notes](docs/design/): background on the analysis graph and the forecaster.
 
 ## Requirements
 

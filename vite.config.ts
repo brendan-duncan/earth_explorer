@@ -40,10 +40,59 @@ function litertWasmAssets(): Plugin {
   };
 }
 
+/**
+ * The user guide (`docs/guide/`, a self-contained static page) ships alongside the app at `guide/`,
+ * so the Pages deploy serves it at `<site>/guide/`. It embeds the shared diagrams by `../illustrations/`,
+ * so those ship at `illustrations/` beside it. A dev middleware maps both URL prefixes onto their
+ * `docs/` directories, and builds copy them verbatim — hand-written HTML, not something Vite should bundle.
+ */
+function guideAssets(): Plugin {
+  const dirs: Record<string, string> = {
+    guide: resolve(rootDir, 'docs/guide'),
+    illustrations: resolve(rootDir, 'docs/illustrations'),
+  };
+  const types: Record<string, string> = {
+    '.html': 'text/html', '.jpg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml',
+  };
+  return {
+    name: 'guide-assets',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const m = req.url?.match(/^\/(guide|illustrations)(\/[^?]*)?(?:\?.*)?$/);
+        if (!m) {
+          return next();
+        }
+        if (!m[2]) {   // `/guide` → `/guide/`, so the page's relative paths resolve
+          res.statusCode = 301;
+          res.setHeader('Location', `/${m[1]}/`);
+          return res.end();
+        }
+        const dir = dirs[m[1]];
+        const file = resolve(dir, `.${m[2].endsWith('/') ? `${m[2]}index.html` : m[2]}`);
+        if (!file.startsWith(dir) || !existsSync(file)) {
+          return next();
+        }
+        res.setHeader('Content-Type', types[file.slice(file.lastIndexOf('.'))] ?? 'application/octet-stream');
+        createReadStream(file).pipe(res);
+      });
+    },
+    closeBundle() {
+      if (!existsSync(resolve(rootDir, 'dist'))) {
+        return;
+      }
+      for (const [name, dir] of Object.entries(dirs)) {
+        if (existsSync(dir)) {
+          cpSync(dir, resolve(rootDir, 'dist', name), { recursive: true });
+        }
+      }
+    },
+  };
+}
+
 export default defineConfig({
   // Relative asset URLs, so the build runs from any subdirectory of a static host.
   base: './',
-  plugins: [litertWasmAssets()],
+  plugins: [litertWasmAssets(), guideAssets()],
   optimizeDeps: {
     // Behind a dynamic import (the forecast op), so the dependency scan doesn't see it up front.
     include: ['@litertjs/core'],
