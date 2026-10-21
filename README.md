@@ -4,6 +4,8 @@ A living-world map of ocean, atmosphere and climate data, rendered with WebGPU i
 
 [Run Earth Explorer](https://brendan-duncan.github.io/earth_explorer/)
 
+[Read the guide](https://brendan-duncan.github.io/earth_explorer/guide/)
+
 Sea-surface temperature and anomaly, sea ice, chlorophyll, coral heat stress, waves, GFS weather,
 rainfall, satellite true color and GOES imagery, drawn on a flat map (equirect, Mercator,
 Mollweide, Equal Earth, polar) or a relief globe. Overlays add currents and wind particle trails,
